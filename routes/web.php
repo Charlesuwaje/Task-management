@@ -24,6 +24,8 @@ Route::post('password/reset', [AuthController::class, 'reset'])->name('password.
 
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/user-tasks-projects', [AuthController::class, 'userTasksAndProjects'])->name('user.tasks.projects');
+
 
 // Route::resource('tasks', TaskController::class);
 // Route::resource('projects', ProjectController::class);

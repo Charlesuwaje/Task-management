@@ -44,7 +44,7 @@
                             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">
+                                <button type="button" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </form>
@@ -52,9 +52,18 @@
                     </li>
                 @endforeach
             </ul>
+
+            <!-- Pagination Links -->
+            {{-- <div class="mt-3">
+                {{ $tasks->links() }}
+            </div> --}}
+            <div class="mt-3">
+                {{ $tasks->links('vendor.pagination.bootstrap-5') }}
+            </div>
         @endif
     </div>
 
+    <!-- Include SortableJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script>
         const taskList = document.getElementById('task-list');
@@ -77,6 +86,30 @@
                     }),
                 });
             },
+        });
+    </script>
+
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.btn-danger').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes am sure !'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 @endsection

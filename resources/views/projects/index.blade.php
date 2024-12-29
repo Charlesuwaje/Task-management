@@ -33,8 +33,7 @@
                                         style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this project?')">
+                                        <button type="button" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
@@ -45,5 +44,37 @@
                 @endif
             </div>
         </div>
+
+        <!-- Pagination Links -->
+        {{-- <div class="mt-3">
+            {{ $projects->links() }}
+        </div> --}}
+        <div class="mt-3">
+            {{ $projects->links('vendor.pagination.bootstrap-5') }}
+        </div>
     </div>
+
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.btn-danger').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes am sure !'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

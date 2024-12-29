@@ -17,29 +17,22 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    // public function index()
-    // {
-    //     $projects = Project::all();
-    //     $tasks = Task::orderBy('priority', 'asc')->get();
-    //     return view('tasks.index', compact('tasks', 'projects'));
-    // }
-
     public function index(Request $request)
-{
-    $projects = Project::all();
-    $tasks = Task::query();
+    {
+        $user = Auth::user();
+        $projects = Project::all();
+        $tasks = Task::query();
 
-    if ($request->has('project_id') && $request->project_id) {
-        $tasks->where('project_id', $request->project_id);
+        $tasks->where('user_id', $user->id ?? null);
+
+        if ($request->has('project_id') && $request->project_id) {
+            $tasks->where('project_id', $request->project_id);
+        }
+
+        $tasks = $tasks->orderBy('priority', 'asc')->paginate(10);
+
+        return view('tasks.index', compact('tasks', 'projects'));
     }
-
-    $tasks = $tasks->orderBy('priority', 'asc')->get();
-    // $tasks = Auth::check()
-    // ? $tasks->orderBy('priority', 'asc')->get()
-    // : $tasks->where('is_public', true)->orderBy('priority', 'asc')->get();
-
-    return view('tasks.index', compact('tasks', 'projects'));
-}
 
 
     public function create()
@@ -59,6 +52,7 @@ class TaskController extends Controller
             'name' => $request->name,
             'project_id' => $request->project_id,
             'priority' => Task::max('priority') + 1,
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('tasks.index');
@@ -66,12 +60,14 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
+        $this->authorizeTask($task);
         $projects = Project::all();
         return view('tasks.edit', compact('task', 'projects'));
     }
 
     public function update(Request $request, Task $task)
     {
+        $this->authorizeTask($task);
         $request->validate([
             'name' => 'required|string',
             'project_id' => 'nullable|exists:projects,id',
@@ -83,6 +79,7 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        $this->authorizeTask($task);
         $this->taskService->delete($task);
         return redirect()->route('tasks.index');
     }
@@ -91,5 +88,11 @@ class TaskController extends Controller
     {
         $this->taskService->reorder($request->order);
         return response()->json(['success' => true]);
+    }
+    private function authorizeTask(Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
     }
 }

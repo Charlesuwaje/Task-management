@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService
 {
     public function create(array $data)
     {
+
         return Task::create($data);
     }
 
@@ -19,6 +21,7 @@ class TaskService
 
     public function delete(Task $task)
     {
+
         $task->delete();
     }
 

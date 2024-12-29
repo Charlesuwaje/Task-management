@@ -37,7 +37,8 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login')->with('success', 'Logged out successfully!');
+        // return redirect()->route('login')->with('success', 'Logged out successfully!');
+        return redirect()->route('user.tasks.projects')->with('success', 'Logged out successfully!');
     }
 
     public function showRegistrationForm()
@@ -107,5 +108,12 @@ class AuthController extends Controller
         throw ValidationException::withMessages([
             'email' => [trans($status)],
         ]);
+    }
+
+    public function userTasksAndProjects()
+    {
+        $users = User::with(['tasks', 'projects'])->paginate(10);
+
+        return view('user-tasks-projects', compact('users'));
     }
 }

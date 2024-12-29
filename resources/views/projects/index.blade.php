@@ -9,7 +9,7 @@
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-primary">Projects</h1>
+            <h1 class="text-primary">Projects Management</h1>
             <a href="{{ route('projects.create') }}" class="btn btn-success">
                 <i class="fas fa-plus me-1"></i> Add Project
             </a>

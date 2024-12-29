@@ -14,7 +14,7 @@
                 <h5><i class="fas fa-exclamation-circle"></i> Please fix the following errors:</h5>
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <li style="list-style: none">{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>

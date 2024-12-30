@@ -92,3 +92,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
    php artisan serve
    ```
 6. Open your web browser and visit `http://localhost:8000` to access the task manager.
+7. This is a hosted link to visit and see what the app is all about cheers `https://task-management-production-5f77.up.railway.app/user-tasks-projects`.
